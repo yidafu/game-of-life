@@ -23,10 +23,23 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation("io.github.oshai:kotlin-logging-jvm:4.0.2")
+                implementation("org.slf4j:slf4j-simple:2.0.3")
             }
         }
-        val jvmTest by getting
+        val jvmTest by getting {
+            dependencies {
+                val kotestVersion = "5.6.0"
+                implementation("io.kotest:kotest-runner-junit5:5.6.0")
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                implementation("io.kotest:kotest-property:$kotestVersion")
+            }
+        }
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 compose.desktop {
