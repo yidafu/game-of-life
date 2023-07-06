@@ -13,9 +13,9 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import kotlinx.coroutines.delay
 
-val flatland = Flatland(100, 100, initProbability = 300)
+val flatland = Flatland(50, 50, initProbability = 300)
 
-const val CELL_SIZE = 5F
+const val CELL_SIZE = 10F
 
 val cellSize = Size(CELL_SIZE, CELL_SIZE)
 @Composable
@@ -23,7 +23,7 @@ val cellSize = Size(CELL_SIZE, CELL_SIZE)
 fun App() {
     var matrix by remember { mutableStateOf(flatland.toMatrix()) }
     LaunchedEffect(Unit) {
-        repeat(100) {
+        repeat(10000) {
             delay(60)
             flatland.update()
             matrix = flatland.toMatrix()
@@ -38,16 +38,11 @@ fun App() {
                         drawRect(
                             color = Color.Black,
                             size = cellSize,
-                            topLeft = Offset(CELL_SIZE * cIdx, CELL_SIZE * rIdx),
+                            topLeft = Offset((CELL_SIZE + 2) * cIdx, (CELL_SIZE + 2) * rIdx),
                         )
                     }
                 }
             }
-//            val canvasQuadrantSize = size / 2F
-//            drawRect(
-//                color = Color.Magenta,
-//                size = canvasQuadrantSize
-//            )
         }
     }
 }

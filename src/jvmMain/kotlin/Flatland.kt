@@ -19,33 +19,33 @@ class Flatland(private val width: Int, private val height: Int, private var roun
 
         logger.info { "World Size: $width x $height ($size)" }
         cellList = Array(width * height) {
-            val x = it % width
-            val y = it / width
-            logger.debug { "init cell X: $x Y: $y" }
-            Cell(x, y, randomAlive(initProbability))
+            val col = it % width
+            val row = it / height
+            Cell(row, col, randomAlive(initProbability))
         }
 
         cellList.forEach {cell ->
             neighboursDirection.forEach {
-                cellAt(cell.x + it.first, cell.y + it.second)
+                cellAt(cell.row + it.first, cell.col + it.second)
                     ?.let { cell.addNeighbour(it) }
             }
         }
     }
 
-    private fun cellAt(x: Int, y: Int): Cell? {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
+    private fun cellAt(row: Int, col: Int): Cell? {
+        if (row < 0 || row >= width || col < 0 || col >= height) {
             return null
         }
-        val index = x * width + y
-        logger.debug { "$x x $y => $index" }
+        val index = row * width + col
+        logger.debug { "$row x $col => $index" }
         return cellList[index]
     }
 
     fun update() {
         round += 1
         cellList.forEach { it.updateNextState() }
-
+//        println()
+//        println(this.toString())
         cellList.forEach { it.updateAliveState() }
     }
 
@@ -54,7 +54,7 @@ class Flatland(private val width: Int, private val height: Int, private var roun
             IntArray(width)
         }
         cellList.forEach {
-            byteArray[it.y][it.x] = if (it.alive) 1 else 0
+            byteArray[it.row][it.col] = if (it.alive) 1 else 0
         }
         return byteArray
     }
@@ -65,7 +65,7 @@ class Flatland(private val width: Int, private val height: Int, private var roun
             append("Flatlnag($round):\n")
             cellList.map {
                 append(if (it.alive) "1" else "0")
-                if (it.x == lastIndex) {
+                if (it.col == lastIndex) {
                     append('\n')
                 } else {
                     append(' ')
